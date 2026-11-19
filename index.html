@@ -1,11 +1,160 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Fungames13</title>
-  </head>
-  <body>
-    <h1>Fungames13</h1>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bored? Game Hub</title>
+<style>
+  *{box-sizing:border-box}
+  body{font-family:system-ui,sans-serif;margin:0;color:#fff;text-align:center;
+       background:linear-gradient(135deg,#7c3aed,#ec4899,#f59e0b);min-height:100vh;padding:16px}
+  h1{margin:6px 0 14px;text-shadow:0 2px 6px rgba(0,0,0,.3)}
+  .wrap{max-width:900px;margin:auto;display:grid;grid-template-columns:240px 1fr;gap:16px}
+  @media(max-width:700px){.wrap{grid-template-columns:1fr}}
+  .panel{background:rgba(0,0,0,.35);border-radius:16px;padding:16px}
+  .side button{display:block;width:100%;margin:8px 0;padding:12px;border:0;border-radius:12px;font-size:16px;font-weight:bold;color:#fff;cursor:pointer;transition:transform .1s}
+  .side button:hover{transform:scale(1.05)}
+  .b1{background:#06b6d4}.b2{background:#22c55e}.b3{background:#ef4444}.b4{background:#f59e0b}.b5{background:#a855f7}
+  .totals{display:flex;gap:8px;margin-bottom:12px}
+  .stat{flex:1;border-radius:12px;padding:10px;font-weight:bold}
+  .stat span{display:block;font-size:28px}
+  .win{background:#16a34a}.loss{background:#dc2626}.rate{background:#2563eb}
+  table{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+  td,th{padding:5px;border-bottom:1px solid rgba(255,255,255,.2)}
+  .btn{background:#facc15;color:#000;border:0;border-radius:10px;padding:10px 16px;margin:6px;font-size:16px;font-weight:bold;cursor:pointer}
+  .reset{background:transparent;color:#fff;border:1px solid #fff;font-size:12px;padding:6px 10px;margin-top:10px;border-radius:8px;cursor:pointer}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:360px;margin:auto}
+  .card{background:#6366f1;border-radius:10px;height:70px;font-size:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none}
+  .card.up{background:#fff}
+  #arena{position:relative;height:260px;background:rgba(0,0,0,.4);border-radius:12px;overflow:hidden}
+  #target{position:absolute;width:60px;height:60px;border-radius:50%;background:#facc15;border:0;cursor:pointer}
+  input{padding:10px;font-size:16px;border-radius:8px;border:0;width:90px}
+  .result{font-size:20px;font-weight:bold;margin:10px}
+</style>
+</head>
+<body>
+<h1>🎮 Bored? Game Hub</h1>
+<div class="wrap">
+  <div class="panel side">
+    <h3>Pick a game</h3>
+    <button class="b1" onclick="start('memory')">🧠 Memory Match</button>
+    <button class="b2" onclick="start('guess')">🔢 Number Guess</button>
+    <button class="b3" onclick="start('click')">🎯 Catch the Dot</button>
+    <button class="b4" onclick="start('react')">⚡ Reaction Test</button>
+    <button class="b5" onclick="surprise()">🎲 Surprise Me</button>
+  </div>
+  <div>
+    <div class="panel" style="margin-bottom:16px">
+      <h3 style="margin-top:0">📊 Your Dashboard</h3>
+      <div class="totals">
+        <div class="stat win">Wins<span id="tw">0</span></div>
+        <div class="stat loss">Losses<span id="tl">0</span></div>
+        <div class="stat rate">Win rate<span id="tr">0%</span></div>
+      </div>
+      <table><thead><tr><th>Game</th><th>W</th><th>L</th></tr></thead><tbody id="rows"></tbody></table>
+      <button class="reset" onclick="resetStats()">Reset scores</button>
+    </div>
+    <div class="panel" id="stage"><p>Choose a game to begin!</p></div>
+  </div>
+</div>
+
+<script>
+const NAMES = {memory:'Memory Match',guess:'Number Guess',click:'Catch the Dot',react:'Reaction Test'};
+let stats = {};
+try { stats = JSON.parse(localStorage.getItem('gamehub')||'{}'); } catch(e){}
+Object.keys(NAMES).forEach(k=>{ if(!stats[k]) stats[k]={w:0,l:0}; });
+
+function save(){ try{localStorage.setItem('gamehub',JSON.stringify(stats));}catch(e){} }
+function render(){
+  let w=0,l=0, html='';
+  for(const k in NAMES){ w+=stats[k].w; l+=stats[k].l;
+    html+='<tr><td>'+NAMES[k]+'</td><td>'+stats[k].w+'</td><td>'+stats[k].l+'</td></tr>'; }
+  document.getElementById('tw').textContent=w;
+  document.getElementById('tl').textContent=l;
+  document.getElementById('tr').textContent=(w+l?Math.round(100*w/(w+l)):0)+'%';
+  document.getElementById('rows').innerHTML=html;
+}
+function record(game,won){ stats[game][won?'w':'l']++; save(); render(); }
+function resetStats(){ Object.keys(NAMES).forEach(k=>stats[k]={w:0,l:0}); save(); render(); }
+
+const stage=document.getElementById('stage');
+let timers=[];
+function clearAll(){ timers.forEach(t=>{clearTimeout(t);clearInterval(t);}); timers=[]; }
+function surprise(){ const k=Object.keys(NAMES); start(k[Math.floor(Math.random()*k.length)]); }
+function start(g){ clearAll(); ({memory:memory,guess:guess,click:catchDot,react:react})[g](); }
+function end(game,won,text){
+  record(game,won);
+  stage.insertAdjacentHTML('beforeend','<div class="result">'+(won?'🎉 You win! ':'😬 You lose. ')+text+'</div><button class="btn" onclick="start(\''+game+'\')">Play again</button>');
+}
+
+/* Memory Match: win by matching all pairs in 16 moves or fewer */
+function memory(){
+  const emojis=['🐶','🍕','🚀','🎸','🌵','⚽','🐙','🍩'];
+  const deck=[...emojis,...emojis].sort(()=>Math.random()-0.5);
+  let first=null,lock=false,moves=0,found=0,over=false;
+  stage.innerHTML='<h2>Memory Match</h2><p>Match all pairs in 16 moves or fewer. Moves: <b id="mv">0</b></p><div class="grid" id="g"></div>';
+  const g=document.getElementById('g');
+  deck.forEach(e=>{
+    const c=document.createElement('div'); c.className='card';
+    c.onclick=()=>{
+      if(lock||over||c.classList.contains('up'))return;
+      c.classList.add('up'); c.textContent=e;
+      if(!first){first=c;return;}
+      moves++; document.getElementById('mv').textContent=moves;
+      const a=first; first=null;
+      if(a.textContent===e){ found++;
+        if(found===8){over=true; end('memory',moves<=16,'Finished in '+moves+' moves.');}
+        else if(moves>=16){over=true; end('memory',false,'Out of moves.');}
+      } else {
+        lock=true;
+        timers.push(setTimeout(()=>{a.classList.remove('up');a.textContent='';c.classList.remove('up');c.textContent='';lock=false;
+          if(moves>=16&&!over){over=true;end('memory',false,'Out of moves.');}},700));
+      }
+    };
+    g.appendChild(c);
+  });
+}
+
+/* Number Guess: 7 tries */
+function guess(){
+  const secret=Math.floor(Math.random()*100)+1; let tries=0,over=false;
+  stage.innerHTML='<h2>Number Guess</h2><p>Pick a number from 1 to 100. You get 7 tries.</p><input id="in" type="number"> <button class="btn" id="go">Guess</button><p id="msg"></p>';
+  const msg=document.getElementById('msg');
+  document.getElementById('go').onclick=()=>{
+    if(over)return;
+    const v=+document.getElementById('in').value; if(!v)return; tries++;
+    if(v===secret){over=true; msg.textContent=''; end('guess',true,'Found it in '+tries+' tries.');}
+    else if(tries>=7){over=true; msg.textContent=''; end('guess',false,'The number was '+secret+'.');}
+    else msg.textContent=(v<secret?'Too low ⬆️':'Too high ⬇️')+' ('+(7-tries)+' tries left)';
+  };
+}
+
+/* Catch the Dot: win with 12 or more in 15 seconds */
+function catchDot(){
+  let score=0,time=15;
+  stage.innerHTML='<h2>Catch the Dot</h2><p>Catch 12 dots in 15 seconds. Score: <b id="sc">0</b> | Time: <b id="tm">15</b></p><div id="arena"><button id="target"></button></div>';
+  const arena=document.getElementById('arena'),t=document.getElementById('target');
+  function move(){t.style.left=Math.random()*(arena.clientWidth-60)+'px';t.style.top=Math.random()*(arena.clientHeight-60)+'px';}
+  move();
+  t.onclick=()=>{score++;document.getElementById('sc').textContent=score;move();};
+  timers.push(setInterval(()=>{
+    time--;document.getElementById('tm').textContent=time;
+    if(time<=0){clearAll(); stage.innerHTML='<h2>Time\'s up!</h2>'; end('click',score>=12,'You caught '+score+' dots.');}
+  },1000));
+}
+
+/* Reaction Test: win with under 400 ms */
+function react(){
+  stage.innerHTML='<h2>Reaction Test</h2><p>Click when it turns green. Under 400 ms wins!</p><div id="box" style="height:180px;border-radius:12px;background:#ef4444;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer">Wait for green...</div>';
+  const box=document.getElementById('box'); let ready=false,t0=0,done=false;
+  timers.push(setTimeout(()=>{box.style.background='#22c55e';box.textContent='CLICK!';ready=true;t0=Date.now();},1500+Math.random()*3000));
+  box.onclick=()=>{
+    if(done)return; done=true; clearAll();
+    if(!ready){end('react',false,'Too early!');}
+    else{const ms=Date.now()-t0; end('react',ms<400,'Your time: '+ms+' ms.');}
+  };
+}
+render();
+</script>
+</body>
 </html>
