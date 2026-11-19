@@ -1,228 +1,353 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bored? Game Hub</title>
 <style>
-  *{box-sizing:border-box}
-  body{font-family:system-ui,sans-serif;font-size:22px;margin:0;color:#fff;text-align:center;
-       background:linear-gradient(135deg,#7c3aed,#ec4899,#f59e0b);min-height:100vh;padding:16px}
-  h1{font-size:44px;margin:6px 0 14px;text-shadow:0 2px 6px rgba(0,0,0,.3)}
-  h2{font-size:32px;margin:0 0 8px}
-  h3{font-size:26px}
-  .wrap{max-width:1000px;margin:auto;display:grid;grid-template-columns:290px 1fr;gap:16px}
-  @media(max-width:750px){.wrap{grid-template-columns:1fr}}
-  .panel{background:rgba(0,0,0,.35);border-radius:16px;padding:16px}
-  .side button{display:block;width:100%;margin:8px 0;padding:14px;border:0;border-radius:12px;font-size:22px;font-weight:bold;color:#fff;cursor:pointer;transition:transform .1s}
-  .side button:hover{transform:scale(1.05)}
-  .b1{background:#06b6d4}.b2{background:#22c55e}.b3{background:#ef4444}.b4{background:#f59e0b}.b5{background:#3b82f6}.b6{background:#ec4899}.b7{background:#14b8a6}.b8{background:#a855f7}
-  .totals{display:flex;gap:8px;margin-bottom:12px}
-  .stat{flex:1;border-radius:12px;padding:10px;font-weight:bold}
-  .stat span{display:block;font-size:36px}
-  .win{background:#16a34a}.loss{background:#dc2626}.rate{background:#2563eb}
-  table{width:100%;border-collapse:collapse;font-size:20px;margin-top:6px}
-  td,th{padding:6px;border-bottom:1px solid rgba(255,255,255,.2)}
-  .btn{background:#facc15;color:#000;border:0;border-radius:10px;padding:12px 20px;margin:6px;font-size:22px;font-weight:bold;cursor:pointer}
-  .reset{background:transparent;color:#fff;border:1px solid #fff;font-size:16px;padding:8px 12px;margin-top:10px;border-radius:8px;cursor:pointer}
-  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:420px;margin:auto}
-  .card{background:#6366f1;border-radius:10px;height:80px;font-size:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none}
-  .card.up{background:#fff}
-  .ttt{display:grid;grid-template-columns:repeat(3,100px);gap:8px;justify-content:center;margin:12px auto}
-  .cell{background:#6366f1;border-radius:10px;height:100px;font-size:56px;font-weight:bold;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none}
-  #arena{position:relative;height:280px;background:rgba(0,0,0,.4);border-radius:12px;overflow:hidden}
-  #target{position:absolute;width:64px;height:64px;border-radius:50%;background:#facc15;border:0;cursor:pointer}
-  input{padding:10px;font-size:22px;border-radius:8px;border:0;width:110px}
-  .result{font-size:26px;font-weight:bold;margin:10px}
-  .big{font-size:60px}
-</style>
-</head>
-<body>
+*{box-sizing:border-box}
+body{font-family:system-ui,sans-serif;font-size:22px;margin:0;color:#fff;text-align:center;background:linear-gradient(135deg,#7c3aed,#ec4899,#f59e0b);min-height:100vh;padding:14px}
+h1{font-size:42px;margin:4px 0 10px}h2{font-size:30px;margin:0 0 8px}
+.wrap{max-width:900px;margin:auto}
+.panel{background:rgba(0,0,0,.38);border-radius:16px;padding:16px;margin-bottom:14px}
+.totals{display:flex;gap:8px}.stat{flex:1;border-radius:12px;padding:8px;font-weight:bold}.stat span{display:block;font-size:34px}
+.win{background:#16a34a}.loss{background:#dc2626}.rate{background:#2563eb}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.tile{border:0;border-radius:12px;padding:12px 6px;color:#fff;font-size:19px;font-weight:bold;cursor:pointer}.tile:hover{transform:scale(1.06)}
+.tile span{display:block;font-size:30px}
+.btn{background:#facc15;color:#000;border:0;border-radius:10px;padding:10px 18px;margin:5px;font-size:22px;font-weight:bold;cursor:pointer}
+.alt{background:#e2e8f0}.big{font-size:56px}
+input[type=text],input[type=number]{padding:8px;font-size:22px;border-radius:8px;border:0;width:130px}
+.slider{width:70%;height:30px}
+table{width:100%;font-size:18px;border-collapse:collapse}td,th{padding:4px;border-bottom:1px solid #fff4}
+summary{cursor:pointer;font-weight:bold}
+.result{font-size:26px;font-weight:bold;margin:10px}
+.cv{max-width:100%;height:auto;background:#0f172a;border-radius:10px;touch-action:none}
+.g{display:grid;gap:6px;justify-content:center;margin:10px auto}
+.cell{background:#6366f1;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:bold;cursor:pointer;user-select:none}
+.up{background:#fff;color:#000}
+.pad{width:120px;height:120px;border:0;border-radius:14px;margin:4px;cursor:pointer}
+.key{font-size:18px;width:40px;height:40px;margin:2px;border-radius:8px;border:0;cursor:pointer}
+.opt{display:block;width:90%;margin:6px auto}
+#arena{position:relative;height:260px;background:#0006;border-radius:12px;overflow:hidden}
+#dot{position:absolute;border-radius:50%;background:#facc15;border:0;cursor:pointer}
+</style></head><body>
 <h1>🎮 Bored? Game Hub</h1>
 <div class="wrap">
-  <div class="panel side">
-    <h3 style="margin-top:0">Pick a game</h3>
-    <button class="b1" onclick="start('memory')">🧠 Memory Match</button>
-    <button class="b2" onclick="start('guess')">🔢 Number Guess</button>
-    <button class="b3" onclick="start('click')">🎯 Catch the Dot</button>
-    <button class="b4" onclick="start('react')">⚡ Reaction Test</button>
-    <button class="b5" onclick="start('ttt')">❌ Tic-Tac-Toe</button>
-    <button class="b6" onclick="start('rps')">✂️ Rock Paper Scissors</button>
-    <button class="b7" onclick="start('math')">➕ Math Sprint</button>
-    <button class="b8" onclick="surprise()">🎲 Surprise Me</button>
-  </div>
-  <div>
-    <div class="panel" style="margin-bottom:16px">
-      <h3 style="margin-top:0">📊 Your Dashboard</h3>
-      <div class="totals">
-        <div class="stat win">Wins<span id="tw">0</span></div>
-        <div class="stat loss">Losses<span id="tl">0</span></div>
-        <div class="stat rate">Win rate<span id="tr">0%</span></div>
-      </div>
-      <table><thead><tr><th>Game</th><th>W</th><th>L</th></tr></thead><tbody id="rows"></tbody></table>
-      <button class="reset" onclick="resetStats()">Reset scores</button>
-    </div>
-    <div class="panel" id="stage"><p>Choose a game to begin!</p></div>
-  </div>
+<div class="panel"><div class="totals">
+<div class="stat win">Wins<span id="tw">0</span></div><div class="stat loss">Losses<span id="tl">0</span></div><div class="stat rate">Win rate<span id="tr">0%</span></div></div>
+<details><summary>📊 Scores for each game</summary><table id="rows"></table><button class="btn alt" onclick="resetStats()" style="font-size:16px">Reset scores</button></details></div>
+<div class="panel" id="stage"><p>Pick a game below. Every game has its own difficulty slider!</p></div>
+<div class="panel"><div class="tiles" id="tiles"></div></div>
 </div>
-
 <script>
-const NAMES = {memory:'Memory Match',guess:'Number Guess',click:'Catch the Dot',react:'Reaction Test',ttt:'Tic-Tac-Toe',rps:'Rock Paper Scissors',math:'Math Sprint'};
-let stats = {};
-try { stats = JSON.parse(localStorage.getItem('gamehub')||'{}'); } catch(e){}
-Object.keys(NAMES).forEach(k=>{ if(!stats[k]) stats[k]={w:0,l:0}; });
+const $=s=>document.querySelector(s),rnd=n=>Math.floor(Math.random()*n),pick=a=>a[rnd(a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
+const LV=['Very Easy','Easy','Medium','Hard','Expert'];
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const G=[],GM={};let cl=[];
+const add=(id,name,em,desc,run)=>{const g={id,name,em,desc,run};G.push(g);GM[id]=g};
+const cleanup=()=>{cl.forEach(f=>f());cl=[]};
+let stats={},diffs={};
+try{stats=JSON.parse(localStorage.getItem('gh25')||'{}');diffs=JSON.parse(localStorage.getItem('gh25d')||'{}')}catch(e){}
+const sv=()=>{try{localStorage.setItem('gh25',JSON.stringify(stats));localStorage.setItem('gh25d',JSON.stringify(diffs))}catch(e){}};
+function render(){let w=0,l=0,h='<tr><th>Game</th><th>W</th><th>L</th></tr>';
+G.forEach(g=>{const s=stats[g.id]||{w:0,l:0};w+=s.w;l+=s.l;h+=`<tr><td>${g.em} ${g.name}</td><td>${s.w}</td><td>${s.l}</td></tr>`});
+$('#tw').textContent=w;$('#tl').textContent=l;$('#tr').textContent=(w+l?Math.round(100*w/(w+l)):0)+'%';$('#rows').innerHTML=h}
+function resetStats(){stats={};sv();render()}
+function openGame(id){cleanup();const g=GM[id],d=diffs[id]||3;
+$('#stage').innerHTML=`<h2>${g.em} ${g.name}</h2><p>${g.desc}</p><p>Difficulty: <b id="dl">${LV[d-1]}</b></p><input type="range" class="slider" id="sl" min="1" max="5" value="${d}"><p style="font-size:16px;margin:0">Slide left for easier, right for harder</p><button class="btn" onclick="launch('${id}')">▶ Start</button>`;
+$('#sl').oninput=e=>{diffs[id]=+e.target.value;$('#dl').textContent=LV[e.target.value-1];sv()};
+$('#stage').scrollIntoView({behavior:'smooth'})}
+function launch(id,d){cleanup();d=d||diffs[id]||3;const g=GM[id];
+$('#stage').innerHTML=`<h2>${g.em} ${g.name} <small style="font-size:18px">(${LV[d-1]})</small></h2><div id="play"></div>`;
+const el=$('#play');let over=false;
+const c={el,d,get over(){return over},
+end(won,text){if(over)return;over=true;cleanup();if(won!==null){stats[id]=stats[id]||{w:0,l:0};stats[id][won?'w':'l']++;sv();render()}
+el.insertAdjacentHTML('beforeend',`<div class="result">${won===null?'🤝 ':won?'🎉 You win! ':'😬 You lose. '}${text}</div><button class="btn" onclick="launch('${id}',${d})">Play again</button><button class="btn alt" onclick="openGame('${id}')">Change difficulty</button>`)},
+every(f,ms){const t=setInterval(f,ms);cl.push(()=>clearInterval(t))},
+later(f,ms){const t=setTimeout(f,ms);cl.push(()=>clearTimeout(t))},
+key(f){const h=e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)&&!/INPUT/.test(document.activeElement.tagName))e.preventDefault();f(e)};document.addEventListener('keydown',h);cl.push(()=>document.removeEventListener('keydown',h))},
+loop(f){let i,on=true;const s=()=>{if(!on)return;f();i=requestAnimationFrame(s)};i=requestAnimationFrame(s);cl.push(()=>{on=false;cancelAnimationFrame(i)})}};
+g.run(c)}
+const canvas=(c,w,h)=>{const k=document.createElement('canvas');k.width=w;k.height=h;k.className='cv';c.el.appendChild(k);return k};
+const dpad=(c,cb)=>{const d=document.createElement('div');[['◀',-1,0],['▲',0,-1],['▼',0,1],['▶',1,0]].forEach(([t,x,y])=>{const b=document.createElement('button');b.className='btn';b.textContent=t;b.onclick=()=>cb(x,y);d.appendChild(b)});c.el.appendChild(d)};
+const grid=(el,cols,w)=>{const d=document.createElement('div');d.className='g';d.style.gridTemplateColumns=`repeat(${cols},${w}px)`;el.appendChild(d);return d};
+const tick=(c,T,f)=>{let t=T;c.every(()=>{t--;const e=$('#tm');if(e)e.textContent=t;if(t<=0)f()},1000)};
+const W={s:['cat','dog','fish','bird','tree','moon','star','cake','boat','frog'],m:['planet','guitar','pencil','island','rocket','castle','jungle','basket','pirate','wizard'],l:['adventure','mountain','chocolate','dinosaur','telescope','volcano','crocodile','basketball','spaceship','waterfall']};
+const wpool=d=>[W.s,W.s,W.m,W.l,W.l][d-1];
 
-function save(){ try{localStorage.setItem('gamehub',JSON.stringify(stats));}catch(e){} }
-function render(){
-  let w=0,l=0, html='';
-  for(const k in NAMES){ w+=stats[k].w; l+=stats[k].l;
-    html+='<tr><td>'+NAMES[k]+'</td><td>'+stats[k].w+'</td><td>'+stats[k].l+'</td></tr>'; }
-  document.getElementById('tw').textContent=w;
-  document.getElementById('tl').textContent=l;
-  document.getElementById('tr').textContent=(w+l?Math.round(100*w/(w+l)):0)+'%';
-  document.getElementById('rows').innerHTML=html;
-}
-function record(game,won){ stats[game][won?'w':'l']++; save(); render(); }
-function resetStats(){ Object.keys(NAMES).forEach(k=>stats[k]={w:0,l:0}); save(); render(); }
+add('memory','Memory Match','🧠','Find all the pairs before you run out of moves.',c=>{
+const P=[6,8,8,10,12][c.d-1],L=Math.round(P*(3-.4*(c.d-1)));
+const em=['🐶','🍕','🚀','🎸','🌵','⚽','🐙','🍩','🦊','🎲','🍉','🐢'].slice(0,P);
+c.el.innerHTML=`<p>Find ${P} pairs in ${L} moves. Moves: <b id="mv">0</b></p>`;
+const g=grid(c.el,4,80);let f=null,lock=false,m=0,n=0;
+shuffle([...em,...em]).forEach(e=>{const k=document.createElement('div');k.className='cell';k.style.cssText='height:70px;font-size:36px';
+k.onclick=()=>{if(lock||c.over||k.classList.contains('up'))return;k.classList.add('up');k.textContent=e;
+if(!f){f=k;return}const a=f;f=null;m++;$('#mv').textContent=m;
+if(a.textContent===e){if(++n===P)return c.end(m<=L,`Finished in ${m} moves.`);if(m>=L)c.end(false,'Out of moves.')}
+else{lock=true;c.later(()=>{a.classList.remove('up');a.textContent='';k.classList.remove('up');k.textContent='';lock=false;if(m>=L)c.end(false,'Out of moves.')},700)}};g.appendChild(k)})});
 
-const stage=document.getElementById('stage');
-let timers=[];
-function clearAll(){ timers.forEach(t=>{clearTimeout(t);clearInterval(t);}); timers=[]; }
-function surprise(){ const k=Object.keys(NAMES); start(k[Math.floor(Math.random()*k.length)]); }
-function start(g){ clearAll(); ({memory:memory,guess:guess,click:catchDot,react:react,ttt:ttt,rps:rps,math:mathSprint})[g](); }
-function again(game){ return '<button class="btn" onclick="start(\''+game+'\')">Play again</button>'; }
-function end(game,won,text){
-  record(game,won);
-  stage.insertAdjacentHTML('beforeend','<div class="result">'+(won?'🎉 You win! ':'😬 You lose. ')+text+'</div>'+again(game));
-}
+add('guess','Number Guess','🔢','Find the secret number with higher/lower hints.',c=>{
+const M=[20,50,100,500,1000][c.d-1],T=[8,7,7,9,10][c.d-1],s=1+rnd(M);let n=0;
+c.el.innerHTML=`<p>Pick a number from 1 to ${M}. You get ${T} tries.</p><input type="number" id="in"> <button class="btn" id="go">Guess</button><p id="msg"></p>`;
+const go=()=>{const v=+$('#in').value;if(!v||c.over)return;n++;$('#in').value='';
+if(v===s)return c.end(true,`Found it in ${n} tries.`);if(n>=T)return c.end(false,`The number was ${s}.`);
+$('#msg').textContent=`${v<s?'Too low ⬆️':'Too high ⬇️'} (${T-n} tries left)`};
+$('#go').onclick=go;$('#in').onkeydown=e=>{if(e.key==='Enter')go()}});
 
-/* Memory Match: match all pairs in 16 moves or fewer */
-function memory(){
-  const emojis=['🐶','🍕','🚀','🎸','🌵','⚽','🐙','🍩'];
-  const deck=[...emojis,...emojis].sort(()=>Math.random()-0.5);
-  let first=null,lock=false,moves=0,found=0,over=false;
-  stage.innerHTML='<h2>Memory Match</h2><p>Match all pairs in 16 moves or fewer. Moves: <b id="mv">0</b></p><div class="grid" id="g"></div>';
-  const g=document.getElementById('g');
-  deck.forEach(e=>{
-    const c=document.createElement('div'); c.className='card';
-    c.onclick=()=>{
-      if(lock||over||c.classList.contains('up'))return;
-      c.classList.add('up'); c.textContent=e;
-      if(!first){first=c;return;}
-      moves++; document.getElementById('mv').textContent=moves;
-      const a=first; first=null;
-      if(a.textContent===e){ found++;
-        if(found===8){over=true; end('memory',moves<=16,'Finished in '+moves+' moves.');}
-        else if(moves>=16){over=true; end('memory',false,'Out of moves.');}
-      } else {
-        lock=true;
-        timers.push(setTimeout(()=>{a.classList.remove('up');a.textContent='';c.classList.remove('up');c.textContent='';lock=false;
-          if(moves>=16&&!over){over=true;end('memory',false,'Out of moves.');}},700));
-      }
-    };
-    g.appendChild(c);
-  });
-}
+add('click','Catch the Dot','🎯','Click the dot as many times as you can in 15 seconds.',c=>{
+const goal=[8,12,16,20,25][c.d-1],S=[80,64,50,40,32][c.d-1],hop=[0,0,1200,900,700][c.d-1];let sc=0;
+c.el.innerHTML=`<p>Catch ${goal} dots. Score: <b id="sc">0</b> | Time: <b id="tm">15</b></p><div id="arena"><button id="dot" style="width:${S}px;height:${S}px"></button></div>`;
+const A=$('#arena'),t=$('#dot'),mv=()=>{t.style.left=Math.random()*(A.clientWidth-S)+'px';t.style.top=Math.random()*(A.clientHeight-S)+'px'};
+mv();t.onclick=()=>{$('#sc').textContent=++sc;if(sc>=goal)return c.end(true,`Caught ${sc} dots!`);mv()};
+if(hop)c.every(mv,hop);tick(c,15,()=>c.end(sc>=goal,`You caught ${sc} dots.`))});
 
-/* Number Guess: 7 tries */
-function guess(){
-  const secret=Math.floor(Math.random()*100)+1; let tries=0,over=false;
-  stage.innerHTML='<h2>Number Guess</h2><p>Pick a number from 1 to 100. You get 7 tries.</p><input id="in" type="number"> <button class="btn" id="go">Guess</button><p id="msg"></p>';
-  const msg=document.getElementById('msg');
-  document.getElementById('go').onclick=()=>{
-    if(over)return;
-    const v=+document.getElementById('in').value; if(!v)return; tries++;
-    if(v===secret){over=true; msg.textContent=''; end('guess',true,'Found it in '+tries+' tries.');}
-    else if(tries>=7){over=true; msg.textContent=''; end('guess',false,'The number was '+secret+'.');}
-    else msg.textContent=(v<secret?'Too low ⬆️':'Too high ⬇️')+' ('+(7-tries)+' tries left)';
-  };
-}
+add('react','Reaction Test','⚡','Click when the box turns green. Three rounds, average counts.',c=>{
+const lim=[600,450,350,300,250][c.d-1];let r=0,ts=[];
+c.el.innerHTML=`<p>Average must be under ${lim} ms. <b id="rd"></b></p><div id="bx" style="height:170px;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer"></div>`;
+const bx=$('#bx');
+const nx=()=>{r++;$('#rd').textContent=`Round ${r} of 3`;bx.style.background='#ef4444';bx.textContent='Wait for green...';let ok=false,t0=0;
+c.later(()=>{ok=true;t0=Date.now();bx.style.background='#22c55e';bx.textContent='CLICK!'},1200+Math.random()*2800);
+bx.onclick=()=>{if(!ok)return c.end(false,'Too early!');const ms=Date.now()-t0;ts.push(ms);bx.onclick=null;bx.style.background='#3b82f6';bx.textContent=ms+' ms';
+if(r>=3){const a=Math.round(ts.reduce((x,y)=>x+y)/3);c.end(a<lim,`Average: ${a} ms.`)}else c.later(nx,900)}};nx()});
 
-/* Catch the Dot: 12 or more in 15 seconds */
-function catchDot(){
-  let score=0,time=15;
-  stage.innerHTML='<h2>Catch the Dot</h2><p>Catch 12 dots in 15 seconds. Score: <b id="sc">0</b> | Time: <b id="tm">15</b></p><div id="arena"><button id="target"></button></div>';
-  const arena=document.getElementById('arena'),t=document.getElementById('target');
-  function move(){t.style.left=Math.random()*(arena.clientWidth-64)+'px';t.style.top=Math.random()*(arena.clientHeight-64)+'px';}
-  move();
-  t.onclick=()=>{score++;document.getElementById('sc').textContent=score;move();};
-  timers.push(setInterval(()=>{
-    time--;document.getElementById('tm').textContent=time;
-    if(time<=0){clearAll(); stage.innerHTML='<h2>Time\'s up!</h2>'; end('click',score>=12,'You caught '+score+' dots.');}
-  },1000));
-}
+add('ttt','Tic-Tac-Toe','❌','You are X. Expert never loses, so a draw is the best you can do there.',c=>{
+const p=[0,.4,.7,.9,1][c.d-1],b=Array(9).fill(''),L=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];let busy=false;
+const w=s=>L.some(l=>l.every(i=>b[i]===s));
+const mm=t=>{if(w('O'))return 1;if(w('X'))return -1;if(!b.includes(''))return 0;let best=t==='O'?-2:2;
+b.forEach((v,i)=>{if(v)return;b[i]=t;const s=mm(t==='O'?'X':'O');b[i]='';best=t==='O'?Math.max(best,s):Math.min(best,s)});return best};
+const cpu=()=>{const fr=b.map((v,i)=>v?-1:i).filter(i=>i>=0);if(Math.random()>p)return pick(fr);let bs=-2,mv=[];
+fr.forEach(i=>{b[i]='O';const s=mm('X');b[i]='';if(s>bs){bs=s;mv=[i]}else if(s===bs)mv.push(i)});return pick(mv)};
+c.el.innerHTML='<p>Get three in a row!</p>';const B=grid(c.el,3,100);
+const dr=()=>{B.innerHTML='';b.forEach((v,i)=>{const k=document.createElement('div');k.className='cell';k.style.cssText='height:100px;font-size:50px';k.textContent=v==='X'?'❌':v==='O'?'⭕':'';k.onclick=()=>pl(i);B.appendChild(k)})};
+const pl=i=>{if(b[i]||busy||c.over)return;b[i]='X';dr();if(w('X'))return c.end(true,'Three in a row!');if(!b.includes(''))return c.end(null,"It's a draw.");
+busy=true;c.later(()=>{b[cpu()]='O';dr();busy=false;if(w('O'))return c.end(false,'The computer won.');if(!b.includes(''))c.end(null,"It's a draw.")},350)};dr()});
 
-/* Reaction Test: under 400 ms wins */
-function react(){
-  stage.innerHTML='<h2>Reaction Test</h2><p>Click when it turns green. Under 400 ms wins!</p><div id="box" style="height:180px;border-radius:12px;background:#ef4444;display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer">Wait for green...</div>';
-  const box=document.getElementById('box'); let ready=false,t0=0,done=false;
-  timers.push(setTimeout(()=>{box.style.background='#22c55e';box.textContent='CLICK!';ready=true;t0=Date.now();},1500+Math.random()*3000));
-  box.onclick=()=>{
-    if(done)return; done=true; clearAll();
-    if(!ready){end('react',false,'Too early!');}
-    else{const ms=Date.now()-t0; end('react',ms<400,'Your time: '+ms+' ms.');}
-  };
-}
+add('rps','Rock Paper Scissors','✂️','First to the target score wins. Harder levels learn your habits.',c=>{
+const T=[2,3,3,4,4][c.d-1],sm=[0,0,.3,.5,.7][c.d-1],O=['🪨','📄','✂️'],h=[0,0,0];let me=0,cp=0;
+c.el.innerHTML=`<p>First to ${T}. You <b id="m">0</b> | Computer <b id="c">0</b></p><div id="pk"></div><div class="big" id="sh">&nbsp;</div><p id="out"></p>`;
+const go=i=>{if(c.over)return;let k=rnd(3);if(Math.random()<sm)k=(h.indexOf(Math.max(...h))+1)%3;h[i]++;
+$('#sh').textContent=O[i]+' vs '+O[k];let r='Tie!';if(i!==k){if((i-k+3)%3===1){me++;r='You score!'}else{cp++;r='Computer scores!'}}
+$('#out').textContent=r;$('#m').textContent=me;$('#c').textContent=cp;if(me>=T||cp>=T)c.end(me>=T,`Final score ${me} to ${cp}.`)};
+O.forEach((o,i)=>{const b=document.createElement('button');b.className='btn big';b.textContent=o;b.onclick=()=>go(i);$('#pk').appendChild(b)})});
 
-/* Tic-Tac-Toe: you are X, computer is O. A draw doesn't count as a win or loss. */
-function ttt(){
-  const b=Array(9).fill(''); let over=false;
-  const lines=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-  stage.innerHTML='<h2>Tic-Tac-Toe</h2><p>You are ❌. Get three in a row to win!</p><div class="ttt" id="bd"></div>';
-  const bd=document.getElementById('bd');
-  function winner(p){return lines.some(l=>l.every(i=>b[i]===p));}
-  function draw(){bd.innerHTML=''; b.forEach((v,i)=>{const c=document.createElement('div');c.className='cell';c.textContent=v;c.onclick=()=>play(i);bd.appendChild(c);});}
-  function findMove(p){ for(const l of lines){const v=l.map(i=>b[i]); if(v.filter(x=>x===p).length===2&&v.includes('')) return l[v.indexOf('')];} return -1; }
-  function play(i){
-    if(over||b[i])return;
-    b[i]='❌'; draw();
-    if(winner('❌')){over=true; return end('ttt',true,'Nice three in a row.');}
-    if(!b.includes('')){over=true; stage.insertAdjacentHTML('beforeend','<div class="result">🤝 Draw!</div>'+again('ttt')); return;}
-    let m=findMove('⭕'); if(m<0)m=findMove('❌');
-    if(m<0&&!b[4])m=4;
-    if(m<0){const free=b.map((v,k)=>v===''?k:-1).filter(k=>k>=0); m=free[Math.floor(Math.random()*free.length)];}
-    b[m]='⭕'; draw();
-    if(winner('⭕')){over=true; return end('ttt',false,'The computer got three in a row.');}
-    if(!b.includes('')){over=true; stage.insertAdjacentHTML('beforeend','<div class="result">🤝 Draw!</div>'+again('ttt'));}
-  }
-  draw();
-}
+add('math','Math Sprint','➕','Answer 5 math questions before time runs out. Get 4 right.',c=>{
+const T=[40,30,25,25,20][c.d-1],d=c.d;let right=0,asked=0,ans;
+c.el.innerHTML=`<p>Time: <b id="tm">${T}</b></p><div class="big" id="q"></div><input type="number" id="in"> <button class="btn" id="go">Go</button><p id="fb"></p>`;
+const pm=(x,y)=>{if(Math.random()<.5){ans=x+y;return `${x} + ${y}`}ans=x-y;return `${x} − ${y}`};
+const mu=(a,b)=>{const x=a+rnd(b),y=a+rnd(b);ans=x*y;return `${x} × ${y}`};
+const gen=()=>{let q;if(d===1){const x=1+rnd(15),y=1+rnd(15);ans=x+y;q=`${x} + ${y}`}
+else if(d===2){const x=10+rnd(40);q=pm(x,1+rnd(x))}else if(d===3)q=mu(2,11);
+else if(d===4)q=Math.random()<.5?mu(3,13):pm(30+rnd(70),10+rnd(20));else q=Math.random()<.6?mu(6,15):pm(100+rnd(200),20+rnd(80));
+$('#q').textContent=q;$('#in').value='';$('#in').focus()};
+const fin=()=>c.end(right>=4,`You got ${right} of 5 right.`);
+const sub=()=>{const v=$('#in').value;if(v===''||c.over)return;asked++;if(+v===ans){right++;$('#fb').textContent='✅ Correct!'}else $('#fb').textContent='❌ It was '+ans;asked>=5?fin():gen()};
+$('#go').onclick=sub;$('#in').onkeydown=e=>{if(e.key==='Enter')sub()};tick(c,T,fin);gen()});
 
-/* Rock Paper Scissors: first to 3 points */
-function rps(){
-  const opts=['🪨','📄','✂️']; let me=0,cpu=0,over=false;
-  stage.innerHTML='<h2>Rock Paper Scissors</h2><p>First to 3 points wins.</p><p>You: <b id="m">0</b> | Computer: <b id="c">0</b></p><div id="pick"></div><div class="big" id="show"></div><p id="out"></p>';
-  const pick=document.getElementById('pick');
-  opts.forEach((o,i)=>{const b=document.createElement('button');b.className='btn big';b.textContent=o;b.onclick=()=>go(i);pick.appendChild(b);});
-  function go(i){
-    if(over)return;
-    const c=Math.floor(Math.random()*3);
-    document.getElementById('show').textContent=opts[i]+' vs '+opts[c];
-    let r;
-    if(i===c) r='Tie!'; else if((i-c+3)%3===1){me++; r='You score!';} else {cpu++; r='Computer scores!';}
-    document.getElementById('out').textContent=r;
-    document.getElementById('m').textContent=me; document.getElementById('c').textContent=cpu;
-    if(me===3||cpu===3){over=true; end('rps',me===3,'Final score '+me+' to '+cpu+'.');}
-  }
-}
+add('snake','Snake','🐍','Eat apples without crashing. Use arrow keys, WASD, or the buttons.',c=>{
+const ms=[190,140,105,80,60][c.d-1],goal=[5,8,10,12,15][c.d-1],N=16,S=22;
+c.el.innerHTML=`<p>Eat ${goal} apples. Apples: <b id="sc">0</b></p>`;const x=canvas(c,N*S,N*S).getContext('2d');
+let sn=[{x:8,y:8},{x:7,y:8},{x:6,y:8}],dir={x:1,y:0},nd=dir,f,sc=0;
+const pl=()=>{do{f={x:rnd(N),y:rnd(N)}}while(sn.some(s=>s.x===f.x&&s.y===f.y))};pl();
+const dr=()=>{x.fillStyle='#0f172a';x.fillRect(0,0,N*S,N*S);x.fillStyle='#ef4444';x.fillRect(f.x*S+2,f.y*S+2,S-4,S-4);sn.forEach((s,i)=>{x.fillStyle=i?'#22c55e':'#86efac';x.fillRect(s.x*S+1,s.y*S+1,S-2,S-2)})};
+const tn=(a,b)=>{if(a!==-dir.x||b!==-dir.y)nd={x:a,y:b}};
+c.key(e=>{const m={ArrowUp:[0,-1],w:[0,-1],ArrowDown:[0,1],s:[0,1],ArrowLeft:[-1,0],a:[-1,0],ArrowRight:[1,0],d:[1,0]}[e.key];if(m)tn(...m)});dpad(c,tn);
+c.every(()=>{dir=nd;const h={x:sn[0].x+dir.x,y:sn[0].y+dir.y};
+if(h.x<0||h.y<0||h.x>=N||h.y>=N||sn.some(s=>s.x===h.x&&s.y===h.y)){dr();return c.end(false,`You crashed with ${sc} apples.`)}
+sn.unshift(h);if(h.x===f.x&&h.y===f.y){$('#sc').textContent=++sc;if(sc>=goal){dr();return c.end(true,`You ate ${sc} apples!`)}pl()}else sn.pop();dr()},ms);dr()});
 
-/* Math Sprint: 5 questions in 30 seconds, need 4 right */
-function mathSprint(){
-  let right=0,asked=0,time=30,a,b,over=false;
-  stage.innerHTML='<h2>Math Sprint</h2><p>Answer 5 questions in 30 seconds. Get 4 right to win! Time: <b id="tm">30</b></p><div class="big" id="q"></div><input id="in" type="number"> <button class="btn" id="go">Go</button><p id="fb"></p>';
-  const qEl=document.getElementById('q'),inp=document.getElementById('in');
-  function next(){a=Math.floor(Math.random()*12)+2;b=Math.floor(Math.random()*12)+2;qEl.textContent=a+' × '+b;inp.value='';inp.focus();}
-  function finish(){ if(over)return; over=true; clearAll(); stage.innerHTML='<h2>Math Sprint</h2>'; end('math',right>=4,'You got '+right+' of 5 right.'); }
-  document.getElementById('go').onclick=()=>{
-    if(over||inp.value==='')return;
-    asked++; if(+inp.value===a*b){right++; document.getElementById('fb').textContent='✅ Correct!';} else document.getElementById('fb').textContent='❌ It was '+(a*b);
-    if(asked>=5) finish(); else next();
-  };
-  inp.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('go').click();});
-  timers.push(setInterval(()=>{time--;document.getElementById('tm').textContent=time;if(time<=0)finish();},1000));
-  next();
-}
+add('simon','Simon Says','🔴','Watch the color pattern, then repeat it.',c=>{
+const T=[4,6,8,10,12][c.d-1],fl=[800,650,500,400,300][c.d-1],col=['#ef4444','#22c55e','#3b82f6','#facc15'];let sq=[],pos=0,ok=false;
+c.el.innerHTML=`<p>Reach a pattern of ${T}. Round: <b id="rd">0</b></p><div id="sm"></div><p id="msg"></p>`;
+const pd=col.map((k,i)=>{const b=document.createElement('button');b.className='pad';b.style.background=k;b.onclick=()=>pr(i);$('#sm').appendChild(b);return b});
+const fh=i=>{pd[i].style.filter='brightness(2.2)';c.later(()=>pd[i].style.filter='',fl*.6)};
+const show=()=>{ok=false;pos=0;$('#msg').textContent='Watch...';sq.forEach((s,k)=>c.later(()=>fh(s),500+k*fl));c.later(()=>{ok=true;$('#msg').textContent='Your turn!'},500+sq.length*fl)};
+const nx=()=>{sq.push(rnd(4));$('#rd').textContent=sq.length;show()};
+const pr=i=>{if(!ok||c.over)return;if(i!==sq[pos])return c.end(false,`You reached a pattern of ${sq.length-1}.`);fh(i);
+if(++pos===sq.length){if(sq.length>=T)return c.end(true,`You repeated all ${T}!`);ok=false;c.later(nx,700)}};nx()});
+
+add('whack','Whack-a-Mole','🐹','Whack the moles before they hide.',c=>{
+const up=[1200,1000,800,650,500][c.d-1],goal=[8,10,12,14,16][c.d-1];let sc=0,cur=-1;
+c.el.innerHTML=`<p>Whack ${goal} in 20 seconds. Score: <b id="sc">0</b> | Time: <b id="tm">20</b></p>`;
+const g=grid(c.el,3,95),hs=[];
+for(let i=0;i<9;i++){const h=document.createElement('button');h.className='cell';h.style.cssText='height:95px;font-size:44px;border:0;color:#fff';
+h.onclick=()=>{if(i!==cur||c.over)return;$('#sc').textContent=++sc;h.textContent='';cur=-1;if(sc>=goal)c.end(true,`You whacked ${sc}!`)};g.appendChild(h);hs.push(h)}
+const sp=()=>{if(cur>=0)hs[cur].textContent='';let n;do{n=rnd(9)}while(n===cur);cur=n;hs[n].textContent='🐹'};sp();c.every(sp,up);
+tick(c,20,()=>c.end(sc>=goal,`You whacked ${sc} moles.`))});
+
+add('hangman','Hangman','🔤','Guess the word one letter at a time.',c=>{
+const w=pick(wpool(c.d)).toUpperCase(),L0=[8,7,7,6,5][c.d-1];let lv=L0;const got=new Set(),used=new Set();
+c.el.innerHTML=`<p>Wrong guesses allowed: ${L0}</p><div id="wd" style="font-size:40px;letter-spacing:6px"></div><p>Lives: <b id="lv"></b></p><div id="kb"></div>`;
+const up=()=>{$('#wd').textContent=[...w].map(x=>got.has(x)?x:'_').join(' ');$('#lv').textContent='❤️'.repeat(lv)||'💀'};
+const gs=ch=>{if(used.has(ch)||c.over)return;used.add(ch);const b=$('#k'+ch);if(b)b.disabled=true;w.includes(ch)?got.add(ch):lv--;up();
+if([...w].every(x=>got.has(x)))c.end(true,`The word was ${w}.`);else if(lv<=0)c.end(false,`The word was ${w}.`)};
+[...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'].forEach(ch=>{const b=document.createElement('button');b.className='key';b.id='k'+ch;b.textContent=ch;b.onclick=()=>gs(ch);$('#kb').appendChild(b)});
+c.key(e=>{const ch=e.key.toUpperCase();if(/^[A-Z]$/.test(ch)&&!e.ctrlKey&&!e.metaKey)gs(ch)});up()});
+
+add('scramble','Word Scramble','🔀','Unscramble 4 words before time runs out.',c=>{
+const T=[90,75,60,50,40][c.d-1],pool=wpool(c.d);let n=0,w='';
+c.el.innerHTML=`<p>Solved: <b id="sv">0</b>/4 | Time: <b id="tm">${T}</b></p><div id="sc" style="font-size:44px;letter-spacing:6px"></div><input type="text" id="in" autocomplete="off"> <button class="btn" id="go">Check</button><button class="btn alt" id="sk">Skip</button><p id="fb"></p>`;
+const nw=()=>{const o=w;do{w=pick(pool)}while(w===o);let s;do{s=shuffle([...w]).join('')}while(s===w);$('#sc').textContent=s.toUpperCase();$('#in').value='';$('#in').focus()};
+const ck=()=>{if(c.over)return;if($('#in').value.trim().toLowerCase()===w){$('#sv').textContent=++n;if(n>=4)return c.end(true,'You unscrambled 4 words.');$('#fb').textContent='✅ Yes!';nw()}else $('#fb').textContent='❌ Try again.'};
+$('#go').onclick=ck;$('#sk').onclick=nw;$('#in').onkeydown=e=>{if(e.key==='Enter')ck()};tick(c,T,()=>c.end(false,`You solved ${n} of 4.`));nw()});
+
+add('hilo','Higher or Lower','🃏','Guess if the next card is higher or lower. Ace is low, King is high.',c=>{
+const L0=[5,4,3,2,2][c.d-1],goal=[6,8,8,10,10][c.d-1];let lv=L0,sc=0,cd=1+rnd(13);
+const nm=n=>({1:'A',11:'J',12:'Q',13:'K'}[n]||n);
+c.el.innerHTML=`<p>Get ${goal} right before losing all ${L0} lives.</p><div class="big" id="cd"></div><p>Correct: <b id="sc">0</b> | Lives: <b id="lv"></b></p><button class="btn" id="hi">⬆️ Higher</button><button class="btn" id="lo">⬇️ Lower</button><p id="fb"></p>`;
+const sh=()=>{$('#cd').textContent='🃏 '+nm(cd);$('#lv').textContent='❤️'.repeat(lv);$('#sc').textContent=sc};
+const go=u=>{if(c.over)return;let n;do{n=1+rnd(13)}while(n===cd);const ok=u?n>cd:n<cd;$('#fb').textContent=`Next card: ${nm(n)} ${ok?'✅':'❌'}`;cd=n;ok?sc++:lv--;sh();
+if(sc>=goal)c.end(true,`${sc} correct!`);else if(lv<=0)c.end(false,`You got ${sc} right.`)};
+$('#hi').onclick=()=>go(true);$('#lo').onclick=()=>go(false);sh()});
+
+add('c4','Connect Four','🔵','You are red. Drop discs to get four in a row.',c=>{
+const D=[0,1,2,3,4][c.d-1],R=6,C=7,b=Array.from({length:R},()=>Array(C).fill(0));let busy=false;
+const wins=(p)=>{for(let r=0;r<R;r++)for(let k=0;k<C;k++)for(const [a,e] of [[0,1],[1,0],[1,1],[1,-1]]){let o=true;for(let i=0;i<4;i++){const y=r+a*i,x=k+e*i;if(y<0||y>=R||x<0||x>=C||b[y][x]!==p){o=false;break}}if(o)return true}return false};
+const val=()=>[...Array(C).keys()].filter(k=>!b[0][k]);
+const drop=(k,p)=>{for(let r=R-1;r>=0;r--)if(!b[r][k]){b[r][k]=p;return}};
+const undo=k=>{for(let r=0;r<R;r++)if(b[r][k]){b[r][k]=0;return}};
+const sc=()=>{let s=0;for(let r=0;r<R;r++)s+=b[r][3]===2?3:b[r][3]===1?-3:0;return s};
+const se=(d,al,be,mx)=>{if(wins(2))return 1e5+d;if(wins(1))return -1e5-d;const v=val();if(!v.length||!d)return sc();
+let best=mx?-Infinity:Infinity;for(const k of v){drop(k,mx?2:1);const s=se(d-1,al,be,!mx);undo(k);
+if(mx){best=Math.max(best,s);al=Math.max(al,s)}else{best=Math.min(best,s);be=Math.min(be,s)}if(al>=be)break}return best};
+const cpu=()=>{const v=val();if(!D)return pick(v);let best=-Infinity,mv=[];for(const k of shuffle(v)){drop(k,2);const s=se(D-1,-Infinity,Infinity,false);undo(k);if(s>best){best=s;mv=[k]}else if(s===best)mv.push(k)}return pick(mv)};
+c.el.innerHTML='<p>You are 🔴. Click a column.</p>';const B=grid(c.el,C,52);
+const dr=()=>{B.innerHTML='';for(let r=0;r<R;r++)for(let k=0;k<C;k++){const d=document.createElement('div');d.style.cssText=`height:52px;border-radius:50%;cursor:pointer;background:${['#1e293b','#ef4444','#facc15'][b[r][k]]}`;d.onclick=()=>pl(k);B.appendChild(d)}};
+const pl=k=>{if(busy||c.over||b[0][k])return;drop(k,1);dr();if(wins(1))return c.end(true,'Four in a row!');if(!val().length)return c.end(null,"It's a draw.");
+busy=true;c.later(()=>{drop(cpu(),2);dr();busy=false;if(wins(2))return c.end(false,'The computer got four in a row.');if(!val().length)c.end(null,"It's a draw.")},300)};dr()});
+
+add('mines','Minesweeper','💣','Reveal every safe square. Use flag mode (or right-click) to mark mines.',c=>{
+const N=8,M=[6,10,14,18,24][c.d-1];let mi=null,rv=Array(64).fill(0),fg=Array(64).fill(0),fm=false,left=64-M;
+c.el.innerHTML=`<p>${M} mines. <button class="btn alt" id="fm">🚩 Flag mode: off</button></p>`;const B=grid(c.el,N,46);
+const nb=i=>{const r=i/N|0,k=i%N,o=[];for(let a=-1;a<2;a++)for(let b=-1;b<2;b++){const y=r+a,x=k+b;if((a||b)&&y>=0&&y<N&&x>=0&&x<N)o.push(y*N+x)}return o};
+const cn=i=>nb(i).filter(j=>mi[j]).length;
+const dr=sm=>{B.innerHTML='';for(let i=0;i<64;i++){const k=document.createElement('div');k.className='cell';k.style.cssText='height:46px;font-size:22px';
+if(rv[i]){k.style.background='#cbd5e1';k.style.color='#000';k.textContent=cn(i)||''}else if(sm&&mi[i])k.textContent='💣';else if(fg[i])k.textContent='🚩';
+k.onclick=()=>ck(i);k.oncontextmenu=e=>{e.preventDefault();if(!rv[i]&&!c.over){fg[i]^=1;dr()}};B.appendChild(k)}};
+const fl=i=>{const st=[i];while(st.length){const x=st.pop();if(rv[x]||fg[x])continue;rv[x]=1;left--;if(!cn(x))nb(x).forEach(j=>{if(!rv[j])st.push(j)})}};
+const ck=i=>{if(c.over||rv[i])return;if(fm){fg[i]^=1;dr();return}if(fg[i])return;
+if(!mi){mi=Array(64).fill(0);const ex=new Set([i,...nb(i)]);shuffle([...Array(64).keys()].filter(j=>!ex.has(j))).slice(0,M).forEach(j=>mi[j]=1)}
+if(mi[i]){dr(true);return c.end(false,'You hit a mine!')}fl(i);dr();if(left<=0)c.end(true,'You cleared the board!')};
+$('#fm').onclick=()=>{fm=!fm;$('#fm').textContent='🚩 Flag mode: '+(fm?'on':'off')};dr()});
+
+add('2048','2048','🔢','Slide and merge tiles to reach the goal tile.',c=>{
+const goal=[128,256,512,1024,2048][c.d-1];let g=Array.from({length:4},()=>Array(4).fill(0));
+c.el.innerHTML=`<p>Reach the ${goal} tile. Arrow keys or buttons.</p>`;const B=grid(c.el,4,80);
+const ad=()=>{const e=[];g.forEach((r,i)=>r.forEach((v,j)=>{if(!v)e.push([i,j])}));if(e.length){const [i,j]=pick(e);g[i][j]=Math.random()<.9?2:4}};
+const sl=r=>{const a=r.filter(v=>v);for(let i=0;i<a.length-1;i++)if(a[i]===a[i+1]){a[i]*=2;a.splice(i+1,1)}while(a.length<4)a.push(0);return a};
+const mv=d=>{const o=JSON.stringify(g);
+if(d===0)g=g.map(sl);else if(d===1)g=g.map(r=>sl(r.slice().reverse()).reverse());
+else for(let j=0;j<4;j++){let col=g.map(r=>r[j]);col=d===2?sl(col):sl(col.reverse()).reverse();col.forEach((v,i)=>g[i][j]=v)}return JSON.stringify(g)!==o};
+const dead=()=>{for(let i=0;i<4;i++)for(let j=0;j<4;j++){if(!g[i][j])return false;if(j<3&&g[i][j]===g[i][j+1])return false;if(i<3&&g[i][j]===g[i+1][j])return false}return true};
+const dr=()=>{B.innerHTML='';g.flat().forEach(v=>{const k=document.createElement('div');k.className='cell';k.style.cssText=`height:80px;font-size:${v>999?24:32}px;background:${v?`hsl(${Math.log2(v)*32},70%,45%)`:'#0006'}`;k.textContent=v||'';B.appendChild(k)})};
+const go=d=>{if(c.over)return;if(mv(d)){ad();dr();if(g.flat().some(v=>v>=goal))c.end(true,`You made ${goal}!`);else if(dead())c.end(false,'No moves left.')}};
+const mp=(x,y)=>go(x<0?0:x>0?1:y<0?2:3);
+c.key(e=>{const d={ArrowLeft:0,ArrowRight:1,ArrowUp:2,ArrowDown:3}[e.key];if(d!==undefined)go(d)});dpad(c,mp);ad();ad();dr()});
+
+add('pong','Pong','🏓','Beat the computer paddle. First to 5. Move with mouse, finger, or ↑/↓.',c=>{
+const W=480,H=300,ph=[90,75,65,55,50][c.d-1],as=[2,2.8,3.5,4.2,5][c.d-1],bs=[3.5,4,4.5,5,5.5][c.d-1];
+const cv=canvas(c,W,H),x=cv.getContext('2d');let py=H/2-ph/2,ay=py,me=0,cp=0,b;
+const sv=d=>{b={x:W/2,y:H/2,vx:d*bs,vy:(Math.random()*2-1)*bs*.6}};sv(1);
+cv.addEventListener('pointermove',e=>{const r=cv.getBoundingClientRect();py=(e.clientY-r.top)*(H/r.height)-ph/2});
+c.key(e=>{if(e.key==='ArrowUp')py-=22;if(e.key==='ArrowDown')py+=22});
+c.loop(()=>{py=clamp(py,0,H-ph);ay=clamp(ay+clamp(b.y-ph/2-ay,-as,as),0,H-ph);b.x+=b.vx;b.y+=b.vy;
+if(b.y<6||b.y>H-6){b.vy=-b.vy;b.y=clamp(b.y,6,H-6)}
+if(b.vx<0&&b.x<=24&&b.x>=10&&b.y>=py-6&&b.y<=py+ph+6){b.vx=-b.vx*1.06;b.vy+=(b.y-py-ph/2)/(ph/2)*2}
+if(b.vx>0&&b.x>=W-24&&b.x<=W-10&&b.y>=ay-6&&b.y<=ay+ph+6){b.vx=-b.vx*1.06;b.vy+=(b.y-ay-ph/2)/(ph/2)*2}
+b.vy=clamp(b.vy,-8,8);let end=null;
+if(b.x<-10){cp++;sv(1)}else if(b.x>W+10){me++;sv(-1)}
+x.fillStyle='#0f172a';x.fillRect(0,0,W,H);x.fillStyle='#fff';x.fillRect(10,py,10,ph);x.fillRect(W-20,ay,10,ph);
+x.beginPath();x.arc(b.x,b.y,6,0,7);x.fill();x.font='24px sans-serif';x.fillText(`${me}   ${cp}`,W/2-30,28);
+if(me>=5)c.end(true,`You won ${me} to ${cp}.`);else if(cp>=5)c.end(false,`You lost ${me} to ${cp}.`)})});
+
+add('flappy','Flappy Bird','🐤','Tap, click, or press space to flap through the pipes.',c=>{
+const W=360,H=420,gap=[150,130,115,100,90][c.d-1],sp=[2,2.4,2.8,3.2,3.6][c.d-1],goal=[5,8,10,12,15][c.d-1];
+c.el.innerHTML=`<p>Pass ${goal} pipes. Score: <b id="sc">0</b></p>`;const cv=canvas(c,W,H),x=cv.getContext('2d');
+let y=H/2,vy=0,ps=[],f=0,sc=0,st=false;const fp=()=>{st=true;vy=-6};
+cv.addEventListener('pointerdown',fp);c.key(e=>{if(e.key===' '||e.key==='ArrowUp')fp()});
+c.loop(()=>{let res=null;
+if(st){vy+=.35;y+=vy;f++;if(f%Math.round(200/sp)===1)ps.push({x:W,t:50+rnd(H-gap-100),p:0});ps.forEach(p=>p.x-=sp);ps=ps.filter(p=>p.x>-60);
+for(const p of ps){if(92>p.x&&68<p.x+50&&(y-12<p.t||y+12>p.t+gap))res=false;if(!p.p&&p.x+50<68){p.p=1;$('#sc').textContent=++sc;if(sc>=goal)res=true}}
+if(y<12||y>H-12)res=false}
+x.fillStyle='#38bdf8';x.fillRect(0,0,W,H);x.fillStyle='#16a34a';ps.forEach(p=>{x.fillRect(p.x,0,50,p.t);x.fillRect(p.x,p.t+gap,50,H)});
+x.font='28px sans-serif';x.fillText('🐤',66,y+10);if(!st){x.fillStyle='#000';x.font='20px sans-serif';x.fillText('Tap to start',125,H/2+50)}
+if(res!==null)c.end(res,`You passed ${sc} pipes.`)})});
+
+add('breakout','Breakout','🧱','Bounce the ball to break all the bricks. Move with mouse, finger, or ←/→.',c=>{
+const W=400,H=320,pw=[110,95,80,70,60][c.d-1],sp=[3.2,3.8,4.4,5,5.6][c.d-1],rows=[2,3,4,5,5][c.d-1];
+c.el.innerHTML='<p>Lives: <b id="lv">3</b></p>';const cv=canvas(c,W,H),x=cv.getContext('2d');
+let px=W/2-pw/2,lv=3,bx,by,vx,vy,br=[];
+for(let r=0;r<rows;r++)for(let k=0;k<8;k++)br.push({x:8+k*48,y:30+r*20,hue:r*55});
+const rs=()=>{bx=W/2;by=H-40;vx=0;vy=0;c.later(()=>{const a=Math.random()*.8-.4;vx=sp*Math.sin(a);vy=-sp*Math.cos(a)},700)};rs();
+cv.addEventListener('pointermove',e=>{const r=cv.getBoundingClientRect();px=(e.clientX-r.left)*(W/r.width)-pw/2});
+c.key(e=>{if(e.key==='ArrowLeft')px-=26;if(e.key==='ArrowRight')px+=26});
+c.loop(()=>{px=clamp(px,0,W-pw);bx+=vx;by+=vy;if(bx<6||bx>W-6){vx=-vx;bx=clamp(bx,6,W-6)}if(by<6){vy=-vy;by=6}
+if(vy>0&&by+6>=H-20&&by<=H-8&&bx>=px-4&&bx<=px+pw+4){const a=clamp((bx-px-pw/2)/(pw/2)*1.1,-1.1,1.1);vx=sp*Math.sin(a);vy=-sp*Math.cos(a)}
+for(let i=0;i<br.length;i++){const b=br[i];if(bx+6>b.x&&bx-6<b.x+45&&by+6>b.y&&by-6<b.y+16){br.splice(i,1);vy=-vy;break}}
+x.fillStyle='#0f172a';x.fillRect(0,0,W,H);br.forEach(b=>{x.fillStyle=`hsl(${b.hue},80%,55%)`;x.fillRect(b.x,b.y,45,16)});
+x.fillStyle='#fff';x.fillRect(px,H-20,pw,10);x.beginPath();x.arc(bx,by,6,0,7);x.fill();
+if(!br.length)return c.end(true,'You cleared every brick!');
+if(by>H+10){$('#lv').textContent=--lv;if(lv<=0)return c.end(false,'Out of lives.');rs()}})});
+
+add('typing','Typing Speed','⌨️','Type the sentence exactly before time runs out.',c=>{
+const S=[['I love pizza and games','The cat sat on the mat'],['The quick brown fox jumps over the lazy dog','Practice makes perfect every single day'],['Pack my box with five dozen liquor jugs','How vexingly quick daft zebras jump'],['Sphinx of black quartz, judge my vow.','Jackdaws love my big sphinx of quartz.'],['The five boxing wizards jump quickly, and nobody expects them to stop.','Amazingly few discotheques provide jukeboxes for quirky dancers.']];
+const s=pick(S[c.d-1]),T=[30,25,20,20,20][c.d-1];
+c.el.innerHTML=`<p>Time: <b id="tm">${T}</b></p><div id="tx" style="font-size:26px;margin:10px"></div><input type="text" id="in" style="width:90%" autocomplete="off">`;
+const up=()=>{const v=$('#in').value;$('#tx').innerHTML=[...s].map((ch,i)=>`<span style="color:${i>=v.length?'#fff':v[i]===ch?'#4ade80':'#f87171'}">${ch===' '?'&nbsp;':ch}</span>`).join('');if(v===s)c.end(true,'Perfect typing!')};
+$('#in').oninput=up;$('#in').focus();up();tick(c,T,()=>c.end(false,"Time's up."))});
+
+const Q={e:[['How many days are in a week?',['5','6','7','8'],2],['What color do you get by mixing blue and yellow?',['Green','Purple','Orange','Pink'],0],['Which planet do we live on?',['Mars','Earth','Venus','Jupiter'],1],['How many legs does a spider have?',['6','8','10','4'],1],['What is the largest ocean?',['Atlantic','Indian','Arctic','Pacific'],3],['Which animal is called the king of the jungle?',['Tiger','Lion','Bear','Wolf'],1],['How many sides does a triangle have?',['3','4','5','6'],0],['What do bees make?',['Milk','Silk','Honey','Bread'],2]],
+m:[['What is the capital of France?',['Rome','Paris','Madrid','Berlin'],1],['Which planet is the Red Planet?',['Mars','Venus','Saturn','Mercury'],0],['How many continents are there?',['5','6','7','8'],2],['What gas do plants take in from the air?',['Oxygen','Helium','Nitrogen','Carbon dioxide'],3],['Who painted the Mona Lisa?',['Picasso','Leonardo da Vinci','Van Gogh','Monet'],1],['At what Celsius temperature does water boil?',['90','100','110','120'],1],['Which is the longest river in Africa?',['Nile','Congo','Niger','Zambezi'],0],['What is the hardest natural substance?',['Gold','Iron','Diamond','Quartz'],2]],
+h:[['What is the chemical symbol for gold?',['Ag','Au','Gd','Go'],1],['In what year did World War II end?',['1939','1942','1945','1950'],2],['What is the capital of Australia?',['Sydney','Melbourne','Canberra','Perth'],2],['What is the smallest prime number?',['0','1','2','3'],2],['How many bones are in an adult human body?',['106','206','306','406'],1],['Who wrote Romeo and Juliet?',['Dickens','Shakespeare','Twain','Austen'],1],['About how fast is light?',['3,000 km/s','30,000 km/s','300,000 km/s','3,000,000 km/s'],2],['Which element has atomic number 1?',['Helium','Oxygen','Hydrogen','Carbon'],2]]};
+add('trivia','Trivia Quiz','❓','Answer 5 questions against the clock. Harder levels get harder questions.',c=>{
+const qs=shuffle([Q.e,Q.e,Q.m,Q.h,Q.h][c.d-1]).slice(0,5),need=[3,3,4,4,5][c.d-1],T=[20,15,12,10,8][c.d-1];let i=0,r=0,t=T;
+const show=()=>{t=T;const [q,o,a]=qs[i];c.el.innerHTML=`<p>Question ${i+1} of 5 | Time: <b id="tm">${t}</b></p><div style="font-size:28px;margin:8px">${q}</div><div id="ops"></div>`;
+shuffle(o.map((x,k)=>({x,ok:k===a}))).forEach(p=>{const b=document.createElement('button');b.className='btn opt';b.textContent=p.x;b.onclick=()=>an(p.ok);$('#ops').appendChild(b)})};
+const an=ok=>{if(c.over)return;if(ok)r++;if(++i>=5)return c.end(r>=need,`You got ${r} of 5. You needed ${need}.`);show()};
+c.every(()=>{t--;const e=$('#tm');if(e)e.textContent=t;if(t<=0)an(false)},1000);show()});
+
+add('pig','Pig Dice','🎲','Roll to build your turn total, but a 1 wipes it out. Hold to bank it.',c=>{
+const hold=[8,12,16,20,20][c.d-1],goal=[40,50,50,60,60][c.d-1];let me=0,cp=0,tn=0,busy=false;
+c.el.innerHTML=`<p>First to ${goal} wins.</p><p id="sc"></p><div class="big" id="dc">🎲</div><p id="msg">Your turn!</p><button class="btn" id="rl">Roll</button><button class="btn alt" id="hd">Hold</button>`;
+const up=()=>$('#sc').textContent=`You ${me} | Computer ${cp} | This turn: ${tn}`;
+const ct=()=>{busy=true;let t=0;const st=()=>{const r=1+rnd(6);$('#dc').textContent='🎲 '+r;
+if(r===1){$('#msg').textContent='Computer rolled a 1 and lost its turn! Your turn.';busy=false;return}
+t+=r;if(cp+t>=goal||t>=hold){cp+=t;up();if(cp>=goal)return c.end(false,`Computer reached ${cp}.`);$('#msg').textContent=`Computer banked ${t}. Your turn!`;busy=false;return}
+$('#msg').textContent=`Computer has ${t} this turn...`;c.later(st,700)};c.later(st,700)};
+$('#rl').onclick=()=>{if(busy||c.over)return;const r=1+rnd(6);$('#dc').textContent='🎲 '+r;if(r===1){tn=0;up();$('#msg').textContent='You rolled a 1! Turn lost.';ct()}else{tn+=r;up();$('#msg').textContent='Roll again or hold?'}};
+$('#hd').onclick=()=>{if(busy||c.over)return;me+=tn;tn=0;up();if(me>=goal)return c.end(true,`You reached ${me}!`);ct()};up()});
+
+add('stroop','Color Clash','🌈','Click the INK color, not the word that is written!',c=>{
+const A=[['RED','#ef4444'],['BLUE','#3b82f6'],['GREEN','#22c55e'],['YELLOW','#facc15'],['PURPLE','#a855f7'],['ORANGE','#f97316']].slice(0,[3,4,5,6,6][c.d-1]);
+const N=[8,10,12,15,18][c.d-1],T=[30,25,22,20,18][c.d-1];let lv=[5,4,3,3,2][c.d-1],ok=0,cur;
+c.el.innerHTML=`<p>Get ${N} right. Correct: <b id="ok">0</b> | Lives: <b id="lv">${lv}</b> | Time: <b id="tm">${T}</b></p><div class="big" id="wd"></div><div id="bt"></div>`;
+const nx=()=>{const w=pick(A);let k;do{k=pick(A)}while(k===w&&Math.random()<.85);cur=k;$('#wd').textContent=w[0];$('#wd').style.color=k[1]};
+A.forEach(a=>{const b=document.createElement('button');b.className='btn';b.style.cssText='background:#334155;color:#fff';b.textContent=a[0];
+b.onclick=()=>{if(c.over)return;if(a===cur){$('#ok').textContent=++ok;if(ok>=N)return c.end(true,'Sharp eyes!')}else{$('#lv').textContent=--lv;if(lv<=0)return c.end(false,`You got ${ok} right.`)}nx()};$('#bt').appendChild(b)});
+tick(c,T,()=>c.end(false,`You got ${ok} right.`));nx()});
+
+add('slide','Sliding Puzzle','🧩','Slide the tiles into order, with the empty space last.',c=>{
+const n=[3,3,3,4,4][c.d-1],sh=[8,25,60,60,120][c.d-1],NN=n*n;let t=[...Array(NN).keys()].map(i=>(i+1)%NN),m=0;
+const nb=z=>{const r=z/n|0,k=z%n,o=[];if(r>0)o.push(z-n);if(r<n-1)o.push(z+n);if(k>0)o.push(z-1);if(k<n-1)o.push(z+1);return o};
+const solved=()=>t.every((v,i)=>v===(i+1)%NN);
+do{let z=NN-1;for(let i=0;i<sh;i++){const j=pick(nb(z));[t[z],t[j]]=[t[j],t[z]];z=j}}while(solved());
+c.el.innerHTML=`<p>Moves: <b id="mv">0</b> <button class="btn alt" id="gu">Give up</button></p>`;const B=grid(c.el,n,n===3?90:75);
+const dr=()=>{B.innerHTML='';t.forEach((v,i)=>{const k=document.createElement('div');k.className='cell';k.style.cssText=`height:${n===3?90:75}px;font-size:34px;${v?'':'background:#0006'}`;k.textContent=v||'';k.onclick=()=>{if(c.over)return;const z=t.indexOf(0);if(nb(z).includes(i)){[t[z],t[i]]=[t[i],t[z]];$('#mv').textContent=++m;dr();if(solved())c.end(true,`Solved in ${m} moves!`)}};B.appendChild(k)})};
+$('#gu').onclick=()=>c.end(false,'You gave up.');dr()});
+
+add('bj','Blackjack','🂡','Beat the dealer hands to win the match. Get close to 21 without going over.',c=>{
+const WN=[2,2,3,3,4][c.d-1],ST=[15,16,17,17,18][c.d-1];let me=0,dl=0,ph,dh,pl=false;
+const dw=()=>1+rnd(13),vl=h=>{let t=h.reduce((a,r)=>a+Math.min(r,10),0);if(h.includes(1)&&t+10<=21)t+=10;return t},nm=r=>({1:'A',11:'J',12:'Q',13:'K'}[r]||r);
+c.el.innerHTML=`<p>First to ${WN} hands wins.</p><p id="sc"></p><p>Dealer: <b id="dh"></b></p><p>You: <b id="ph"></b></p><button class="btn" id="ht">Hit</button><button class="btn alt" id="sd">Stand</button><p id="fb"></p>`;
+const sh=hide=>{$('#ph').textContent=ph.map(nm).join(' ')+' = '+vl(ph);$('#dh').textContent=hide?nm(dh[0])+' ?':dh.map(nm).join(' ')+' = '+vl(dh);$('#sc').textContent=`You ${me} | Dealer ${dl}`};
+const se=(msg,w)=>{pl=false;w>0?me++:w<0&&dl++;sh(false);$('#fb').textContent=msg;
+if(me>=WN)return c.end(true,`Final: ${me} to ${dl}.`);if(dl>=WN)return c.end(false,`Final: ${me} to ${dl}.`);c.later(dealH,1800)};
+const dealH=()=>{ph=[dw(),dw()];dh=[dw(),dw()];pl=true;$('#fb').textContent='Hit or stand?';sh(true);if(vl(ph)===21)sd()};
+const ht=()=>{if(!pl||c.over)return;ph.push(dw());sh(true);if(vl(ph)>21)se('Bust! Dealer wins the hand.',-1);else if(vl(ph)===21)sd()};
+const sd=()=>{if(!pl||c.over)return;while(vl(dh)<ST)dh.push(dw());const p=vl(ph),d=vl(dh);
+if(d>21)se('Dealer busts! You win the hand.',1);else if(p>d)se('You win the hand!',1);else if(p<d)se('Dealer wins the hand.',-1);else se('Push, no point.',0)};
+$('#ht').onclick=ht;$('#sd').onclick=sd;dealH()});
+
+const T=$('#tiles');
+G.forEach((g,i)=>{const b=document.createElement('button');b.className='tile';b.style.background=`hsl(${i*14},65%,42%)`;b.innerHTML=`<span>${g.em}</span>${g.name}`;b.onclick=()=>openGame(g.id);T.appendChild(b)});
+const sb=document.createElement('button');sb.className='tile';sb.style.background='#0f172a';sb.innerHTML='<span>🎲</span>Surprise Me';sb.onclick=()=>openGame(pick(G).id);T.appendChild(sb);
 render();
-</script>
-</body>
-</html>
+</script></body></html>
