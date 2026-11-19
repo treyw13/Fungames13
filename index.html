@@ -6,42 +6,50 @@
 <title>Bored? Game Hub</title>
 <style>
   *{box-sizing:border-box}
-  body{font-family:system-ui,sans-serif;margin:0;color:#fff;text-align:center;
+  body{font-family:system-ui,sans-serif;font-size:22px;margin:0;color:#fff;text-align:center;
        background:linear-gradient(135deg,#7c3aed,#ec4899,#f59e0b);min-height:100vh;padding:16px}
-  h1{margin:6px 0 14px;text-shadow:0 2px 6px rgba(0,0,0,.3)}
-  .wrap{max-width:900px;margin:auto;display:grid;grid-template-columns:240px 1fr;gap:16px}
-  @media(max-width:700px){.wrap{grid-template-columns:1fr}}
+  h1{font-size:44px;margin:6px 0 14px;text-shadow:0 2px 6px rgba(0,0,0,.3)}
+  h2{font-size:32px;margin:0 0 8px}
+  h3{font-size:26px}
+  .wrap{max-width:1000px;margin:auto;display:grid;grid-template-columns:290px 1fr;gap:16px}
+  @media(max-width:750px){.wrap{grid-template-columns:1fr}}
   .panel{background:rgba(0,0,0,.35);border-radius:16px;padding:16px}
-  .side button{display:block;width:100%;margin:8px 0;padding:12px;border:0;border-radius:12px;font-size:16px;font-weight:bold;color:#fff;cursor:pointer;transition:transform .1s}
+  .side button{display:block;width:100%;margin:8px 0;padding:14px;border:0;border-radius:12px;font-size:22px;font-weight:bold;color:#fff;cursor:pointer;transition:transform .1s}
   .side button:hover{transform:scale(1.05)}
-  .b1{background:#06b6d4}.b2{background:#22c55e}.b3{background:#ef4444}.b4{background:#f59e0b}.b5{background:#a855f7}
+  .b1{background:#06b6d4}.b2{background:#22c55e}.b3{background:#ef4444}.b4{background:#f59e0b}.b5{background:#3b82f6}.b6{background:#ec4899}.b7{background:#14b8a6}.b8{background:#a855f7}
   .totals{display:flex;gap:8px;margin-bottom:12px}
   .stat{flex:1;border-radius:12px;padding:10px;font-weight:bold}
-  .stat span{display:block;font-size:28px}
+  .stat span{display:block;font-size:36px}
   .win{background:#16a34a}.loss{background:#dc2626}.rate{background:#2563eb}
-  table{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
-  td,th{padding:5px;border-bottom:1px solid rgba(255,255,255,.2)}
-  .btn{background:#facc15;color:#000;border:0;border-radius:10px;padding:10px 16px;margin:6px;font-size:16px;font-weight:bold;cursor:pointer}
-  .reset{background:transparent;color:#fff;border:1px solid #fff;font-size:12px;padding:6px 10px;margin-top:10px;border-radius:8px;cursor:pointer}
-  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:360px;margin:auto}
-  .card{background:#6366f1;border-radius:10px;height:70px;font-size:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none}
+  table{width:100%;border-collapse:collapse;font-size:20px;margin-top:6px}
+  td,th{padding:6px;border-bottom:1px solid rgba(255,255,255,.2)}
+  .btn{background:#facc15;color:#000;border:0;border-radius:10px;padding:12px 20px;margin:6px;font-size:22px;font-weight:bold;cursor:pointer}
+  .reset{background:transparent;color:#fff;border:1px solid #fff;font-size:16px;padding:8px 12px;margin-top:10px;border-radius:8px;cursor:pointer}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:420px;margin:auto}
+  .card{background:#6366f1;border-radius:10px;height:80px;font-size:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none}
   .card.up{background:#fff}
-  #arena{position:relative;height:260px;background:rgba(0,0,0,.4);border-radius:12px;overflow:hidden}
-  #target{position:absolute;width:60px;height:60px;border-radius:50%;background:#facc15;border:0;cursor:pointer}
-  input{padding:10px;font-size:16px;border-radius:8px;border:0;width:90px}
-  .result{font-size:20px;font-weight:bold;margin:10px}
+  .ttt{display:grid;grid-template-columns:repeat(3,100px);gap:8px;justify-content:center;margin:12px auto}
+  .cell{background:#6366f1;border-radius:10px;height:100px;font-size:56px;font-weight:bold;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none}
+  #arena{position:relative;height:280px;background:rgba(0,0,0,.4);border-radius:12px;overflow:hidden}
+  #target{position:absolute;width:64px;height:64px;border-radius:50%;background:#facc15;border:0;cursor:pointer}
+  input{padding:10px;font-size:22px;border-radius:8px;border:0;width:110px}
+  .result{font-size:26px;font-weight:bold;margin:10px}
+  .big{font-size:60px}
 </style>
 </head>
 <body>
 <h1>🎮 Bored? Game Hub</h1>
 <div class="wrap">
   <div class="panel side">
-    <h3>Pick a game</h3>
+    <h3 style="margin-top:0">Pick a game</h3>
     <button class="b1" onclick="start('memory')">🧠 Memory Match</button>
     <button class="b2" onclick="start('guess')">🔢 Number Guess</button>
     <button class="b3" onclick="start('click')">🎯 Catch the Dot</button>
     <button class="b4" onclick="start('react')">⚡ Reaction Test</button>
-    <button class="b5" onclick="surprise()">🎲 Surprise Me</button>
+    <button class="b5" onclick="start('ttt')">❌ Tic-Tac-Toe</button>
+    <button class="b6" onclick="start('rps')">✂️ Rock Paper Scissors</button>
+    <button class="b7" onclick="start('math')">➕ Math Sprint</button>
+    <button class="b8" onclick="surprise()">🎲 Surprise Me</button>
   </div>
   <div>
     <div class="panel" style="margin-bottom:16px">
@@ -59,7 +67,7 @@
 </div>
 
 <script>
-const NAMES = {memory:'Memory Match',guess:'Number Guess',click:'Catch the Dot',react:'Reaction Test'};
+const NAMES = {memory:'Memory Match',guess:'Number Guess',click:'Catch the Dot',react:'Reaction Test',ttt:'Tic-Tac-Toe',rps:'Rock Paper Scissors',math:'Math Sprint'};
 let stats = {};
 try { stats = JSON.parse(localStorage.getItem('gamehub')||'{}'); } catch(e){}
 Object.keys(NAMES).forEach(k=>{ if(!stats[k]) stats[k]={w:0,l:0}; });
@@ -81,13 +89,14 @@ const stage=document.getElementById('stage');
 let timers=[];
 function clearAll(){ timers.forEach(t=>{clearTimeout(t);clearInterval(t);}); timers=[]; }
 function surprise(){ const k=Object.keys(NAMES); start(k[Math.floor(Math.random()*k.length)]); }
-function start(g){ clearAll(); ({memory:memory,guess:guess,click:catchDot,react:react})[g](); }
+function start(g){ clearAll(); ({memory:memory,guess:guess,click:catchDot,react:react,ttt:ttt,rps:rps,math:mathSprint})[g](); }
+function again(game){ return '<button class="btn" onclick="start(\''+game+'\')">Play again</button>'; }
 function end(game,won,text){
   record(game,won);
-  stage.insertAdjacentHTML('beforeend','<div class="result">'+(won?'🎉 You win! ':'😬 You lose. ')+text+'</div><button class="btn" onclick="start(\''+game+'\')">Play again</button>');
+  stage.insertAdjacentHTML('beforeend','<div class="result">'+(won?'🎉 You win! ':'😬 You lose. ')+text+'</div>'+again(game));
 }
 
-/* Memory Match: win by matching all pairs in 16 moves or fewer */
+/* Memory Match: match all pairs in 16 moves or fewer */
 function memory(){
   const emojis=['🐶','🍕','🚀','🎸','🌵','⚽','🐙','🍩'];
   const deck=[...emojis,...emojis].sort(()=>Math.random()-0.5);
@@ -129,12 +138,12 @@ function guess(){
   };
 }
 
-/* Catch the Dot: win with 12 or more in 15 seconds */
+/* Catch the Dot: 12 or more in 15 seconds */
 function catchDot(){
   let score=0,time=15;
   stage.innerHTML='<h2>Catch the Dot</h2><p>Catch 12 dots in 15 seconds. Score: <b id="sc">0</b> | Time: <b id="tm">15</b></p><div id="arena"><button id="target"></button></div>';
   const arena=document.getElementById('arena'),t=document.getElementById('target');
-  function move(){t.style.left=Math.random()*(arena.clientWidth-60)+'px';t.style.top=Math.random()*(arena.clientHeight-60)+'px';}
+  function move(){t.style.left=Math.random()*(arena.clientWidth-64)+'px';t.style.top=Math.random()*(arena.clientHeight-64)+'px';}
   move();
   t.onclick=()=>{score++;document.getElementById('sc').textContent=score;move();};
   timers.push(setInterval(()=>{
@@ -143,9 +152,9 @@ function catchDot(){
   },1000));
 }
 
-/* Reaction Test: win with under 400 ms */
+/* Reaction Test: under 400 ms wins */
 function react(){
-  stage.innerHTML='<h2>Reaction Test</h2><p>Click when it turns green. Under 400 ms wins!</p><div id="box" style="height:180px;border-radius:12px;background:#ef4444;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer">Wait for green...</div>';
+  stage.innerHTML='<h2>Reaction Test</h2><p>Click when it turns green. Under 400 ms wins!</p><div id="box" style="height:180px;border-radius:12px;background:#ef4444;display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer">Wait for green...</div>';
   const box=document.getElementById('box'); let ready=false,t0=0,done=false;
   timers.push(setTimeout(()=>{box.style.background='#22c55e';box.textContent='CLICK!';ready=true;t0=Date.now();},1500+Math.random()*3000));
   box.onclick=()=>{
@@ -153,6 +162,65 @@ function react(){
     if(!ready){end('react',false,'Too early!');}
     else{const ms=Date.now()-t0; end('react',ms<400,'Your time: '+ms+' ms.');}
   };
+}
+
+/* Tic-Tac-Toe: you are X, computer is O. A draw doesn't count as a win or loss. */
+function ttt(){
+  const b=Array(9).fill(''); let over=false;
+  const lines=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+  stage.innerHTML='<h2>Tic-Tac-Toe</h2><p>You are ❌. Get three in a row to win!</p><div class="ttt" id="bd"></div>';
+  const bd=document.getElementById('bd');
+  function winner(p){return lines.some(l=>l.every(i=>b[i]===p));}
+  function draw(){bd.innerHTML=''; b.forEach((v,i)=>{const c=document.createElement('div');c.className='cell';c.textContent=v;c.onclick=()=>play(i);bd.appendChild(c);});}
+  function findMove(p){ for(const l of lines){const v=l.map(i=>b[i]); if(v.filter(x=>x===p).length===2&&v.includes('')) return l[v.indexOf('')];} return -1; }
+  function play(i){
+    if(over||b[i])return;
+    b[i]='❌'; draw();
+    if(winner('❌')){over=true; return end('ttt',true,'Nice three in a row.');}
+    if(!b.includes('')){over=true; stage.insertAdjacentHTML('beforeend','<div class="result">🤝 Draw!</div>'+again('ttt')); return;}
+    let m=findMove('⭕'); if(m<0)m=findMove('❌');
+    if(m<0&&!b[4])m=4;
+    if(m<0){const free=b.map((v,k)=>v===''?k:-1).filter(k=>k>=0); m=free[Math.floor(Math.random()*free.length)];}
+    b[m]='⭕'; draw();
+    if(winner('⭕')){over=true; return end('ttt',false,'The computer got three in a row.');}
+    if(!b.includes('')){over=true; stage.insertAdjacentHTML('beforeend','<div class="result">🤝 Draw!</div>'+again('ttt'));}
+  }
+  draw();
+}
+
+/* Rock Paper Scissors: first to 3 points */
+function rps(){
+  const opts=['🪨','📄','✂️']; let me=0,cpu=0,over=false;
+  stage.innerHTML='<h2>Rock Paper Scissors</h2><p>First to 3 points wins.</p><p>You: <b id="m">0</b> | Computer: <b id="c">0</b></p><div id="pick"></div><div class="big" id="show"></div><p id="out"></p>';
+  const pick=document.getElementById('pick');
+  opts.forEach((o,i)=>{const b=document.createElement('button');b.className='btn big';b.textContent=o;b.onclick=()=>go(i);pick.appendChild(b);});
+  function go(i){
+    if(over)return;
+    const c=Math.floor(Math.random()*3);
+    document.getElementById('show').textContent=opts[i]+' vs '+opts[c];
+    let r;
+    if(i===c) r='Tie!'; else if((i-c+3)%3===1){me++; r='You score!';} else {cpu++; r='Computer scores!';}
+    document.getElementById('out').textContent=r;
+    document.getElementById('m').textContent=me; document.getElementById('c').textContent=cpu;
+    if(me===3||cpu===3){over=true; end('rps',me===3,'Final score '+me+' to '+cpu+'.');}
+  }
+}
+
+/* Math Sprint: 5 questions in 30 seconds, need 4 right */
+function mathSprint(){
+  let right=0,asked=0,time=30,a,b,over=false;
+  stage.innerHTML='<h2>Math Sprint</h2><p>Answer 5 questions in 30 seconds. Get 4 right to win! Time: <b id="tm">30</b></p><div class="big" id="q"></div><input id="in" type="number"> <button class="btn" id="go">Go</button><p id="fb"></p>';
+  const qEl=document.getElementById('q'),inp=document.getElementById('in');
+  function next(){a=Math.floor(Math.random()*12)+2;b=Math.floor(Math.random()*12)+2;qEl.textContent=a+' × '+b;inp.value='';inp.focus();}
+  function finish(){ if(over)return; over=true; clearAll(); stage.innerHTML='<h2>Math Sprint</h2>'; end('math',right>=4,'You got '+right+' of 5 right.'); }
+  document.getElementById('go').onclick=()=>{
+    if(over||inp.value==='')return;
+    asked++; if(+inp.value===a*b){right++; document.getElementById('fb').textContent='✅ Correct!';} else document.getElementById('fb').textContent='❌ It was '+(a*b);
+    if(asked>=5) finish(); else next();
+  };
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('go').click();});
+  timers.push(setInterval(()=>{time--;document.getElementById('tm').textContent=time;if(time<=0)finish();},1000));
+  next();
 }
 render();
 </script>
